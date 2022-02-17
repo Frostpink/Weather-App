@@ -9,10 +9,6 @@ import {
 import type { MetaFunction, LinksFunction } from "remix";
 
 import styles from "./styles/app.css"
-
-// export function links() {
-//   return [{ rel: "stylesheet", href: styles }]
-// }
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 
 export const meta: MetaFunction = () => {
