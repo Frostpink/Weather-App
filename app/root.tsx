@@ -9,6 +9,8 @@ import {
 import type { MetaFunction, LinksFunction } from "remix";
 
 import styles from "./styles/app.css"
+import { useEffect } from "react";
+const { themeChange } = require("theme-change")
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 
 export const meta: MetaFunction = () => {
@@ -16,6 +18,11 @@ export const meta: MetaFunction = () => {
 };
 
 export default function App() {
+
+  useEffect(() => {
+    themeChange(false)
+  }, [])
+
   return (
     <html lang="en">
       <head>
