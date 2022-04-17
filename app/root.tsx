@@ -2,38 +2,15 @@
 
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from 'remix'
 import type { MetaFunction } from 'remix'
-import { Center, MantineProvider, Paper, Switch } from '@mantine/core'
-
-import { useState } from 'react'
-
-// export function links() {
-//   return [{ rel: "stylesheet", href: styles }]
-// }
+import { MantineProvider } from '@mantine/core'
 
 export const meta: MetaFunction = () => {
     return { title: 'New Remix App' }
 }
 
 export default function App() {
-    const [dark, setDark] = useState<'light' | 'dark'>('light')
     let theme = {
-        colorScheme: dark,
         primaryColor: 'grape',
-        //     colors: {
-        //       dark:
-        // [
-        //    '#f4e5ff',
-        //    '#d6b5ff',
-        //    '#b984fc',
-        //    '#9d54f8',
-        //    '#8123f5',
-        //    '#686868',
-        //    '#5107ac',
-        //    '#747474',
-        //    '#23014c',
-        //    '#0e001e',
-        //  ],
-        //     },
     }
     return (
         <MantineProvider theme={theme}>
@@ -44,17 +21,8 @@ export default function App() {
                     <Meta />
                     <Links />
                 </head>
-                <body>
-                    <Paper padding='xl' radius='xs'>
-                        <Center>
-                            <Switch
-                                checked={dark === 'dark'}
-                                onChange={event => setDark(event.target.checked ? 'dark' : 'light')}
-                                size='md'
-                            />
-                        </Center>
-                        <Outlet />
-                    </Paper>
+                <body style={{ margin: 0 }}>
+                    <Outlet />
                     <ScrollRestoration />
                     <Scripts />
                     {process.env.NODE_ENV === 'development' && <LiveReload />}
