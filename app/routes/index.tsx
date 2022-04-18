@@ -4,13 +4,13 @@
 // primary text color: gray-200
 // secondary background color: gray-600
 
-function WeatherCard() {
+function WeatherCard({ text, temperature }: { text: string; temperature: number }) {
     // TODO: change the text-[9px] to something better
     return (
         <div className='rounded-lg bg-gray-600 p-2 text-center text-xs font-semibold text-gray-200 shadow-md'>
-            <p>12 AM</p>
+            <p>{text}</p>
             <p className='py-3'>ICON</p>
-            <p>26 dC</p>
+            <p>{temperature} dC</p>
         </div>
     )
 }
@@ -40,26 +40,18 @@ export default function Index() {
                     <p className='text-xs font-semibold'>Ottawa, Ontario</p>
                 </div>
                 <div>
-                    <div className='flex flex-row justify-center'>
-                        <p className='after:content-[" "] font-bold text-gray-200 after:mx-auto after:block after:h-2 after:w-2 after:rounded-full after:bg-pink-500'>
-                            Today
-                        </p>
-                        <p className='after:content-[" "] font-bold text-gray-200 after:mx-auto after:block after:h-2 after:w-2 after:rounded-full after:bg-pink-500'>
-                            Tomorrow
-                        </p>
-                    </div>
                     <div className='flex flex-col  gap-y-6'>
                         <div className='mx-auto flex gap-x-3'>
-                            {[...Array(6)].map((_, i) => (
+                            {[...Array(5)].map((_, i) => (
                                 <div className='' key={i}>
-                                    <WeatherCard />
+                                    <WeatherCard text='12 AM' temperature={26} />
                                 </div>
                             ))}
                         </div>
                         <div className='mx-auto flex gap-x-3'>
-                            {[...Array(6)].map((_, i) => (
+                            {[...Array(4)].map((_, i) => (
                                 <div className='' key={i}>
-                                    <WeatherCard />
+                                    <WeatherCard text='Tomorrow' temperature={26} />
                                 </div>
                             ))}
                         </div>
