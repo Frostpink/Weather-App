@@ -5,7 +5,7 @@ import { useState } from 'react'
 // import WeatherService from '../services/weather.service'
 // import http from '../http-common'
 
-import { WeatherCurrent, Location, WeatherHour } from './types'
+import { WeatherCurrent, Location, WeatherHour, WeatherDay } from './types'
 
 // primary background color: gray-700
 // primary text color: gray-200
@@ -21,6 +21,28 @@ function getHourFromDate(date: string) {
         return '12pm'
     } else {
         return `${hour - 12}pm`
+    }
+}
+
+function getWeekdayFromDate(date: string): string {
+    const weekday = new Date(date).getDay()
+    switch (weekday) {
+        case 0:
+            return 'Sun'
+        case 1:
+            return 'Mon'
+        case 2:
+            return 'Tue'
+        case 3:
+            return 'Wed'
+        case 4:
+            return 'Thu'
+        case 5:
+            return 'Fri'
+        case 6:
+            return 'Sat'
+        default:
+            return '???'
     }
 }
 
@@ -54,9 +76,9 @@ export default function Index() {
         },
     })
 
-    const [hourlyWeather, setHourlyWeather] = useState<WeatherHour[]>([])
-
     const [location, setLocation] = useState<Location | null>(null)
+    const [hourlyWeather, setHourlyWeather] = useState<WeatherHour[]>([])
+    const [dailyWeather, setDailyWeather] = useState<WeatherDay[]>([])
 
     const [locationInput, setLocationInput] = useState<string>('')
 
@@ -133,6 +155,32 @@ export default function Index() {
             })
     }
 
+    const getDailyWeather = async (locationid: string) => {
+        if (!locationid) throw new Error('No location selected')
+
+        const params = {
+            apikey: '***REMOVED***',
+            language: 'en-CA',
+            metric: true,
+        }
+
+        const url = `http://dataservice.accuweather.com/forecasts/v1/daily/5day/${locationid}`
+
+        return await axios
+            .get<
+                { params: { apikey: string; language: string } },
+                AxiosResponse<{ DailyForecasts: WeatherDay[] }>
+            >(url, {
+                params,
+            })
+            .then(response => {
+                return response.data.DailyForecasts
+            })
+            .catch(error => {
+                throw new Error(error.message)
+            })
+    }
+
     const onClickHandler = async () => {
         // TODO: change this function to use the weather service
         // const { locations, errors } = await WeatherService.getLocationKey('ottawa')
@@ -146,6 +194,14 @@ export default function Index() {
 
             getHourlyWeather(locationData.Key).then(hourlyWeather => {
                 setHourlyWeather(hourlyWeather)
+            })
+
+            getDailyWeather(locationData.Key).then(dailyWeather => {
+                dailyWeather = dailyWeather.map(day => {
+                    day.Weekday = getWeekdayFromDate(day.Date)
+                    return day
+                })
+                setDailyWeather(dailyWeather)
             })
         } catch (error) {
             console.error(error)
@@ -195,20 +251,31 @@ export default function Index() {
                 <div>
                     <div className='flex flex-col  gap-y-6'>
                         <div className='mx-auto flex gap-x-3'>
-                            {hourlyWeather.map((weather: WeatherHour, index: number) => (
-                                <div className='' key={index}>
-                                    <WeatherCard
-                                        text={getHourFromDate(weather.DateTime)}
-                                        temperature={weather.Temperature.Value}
-                                    />
-                                </div>
-                            ))}
+                            {hourlyWeather
+                                .filter((_, index) => !(index % 2))
+                                .map((weather: WeatherHour, index: number) => (
+                                    <div className='' key={index}>
+                                        <WeatherCard
+                                            text={getHourFromDate(weather.DateTime)}
+                                            temperature={weather.Temperature.Value}
+                                        />
+                                    </div>
+                                ))}
                         </div>
 
                         <div className='mx-auto flex gap-x-3'>
-                            {[...Array(4)].map((_, i) => (
-                                <div className='' key={i}>
-                                    <WeatherCard text='Tomorrow' temperature={26} />
+                            {dailyWeather.map((weather: WeatherDay, index: number) => (
+                                <div className='' key={index}>
+                                    <WeatherCard
+                                        text={
+                                            index === 0
+                                                ? 'Today'
+                                                : index === 1
+                                                ? 'Tomorrow'
+                                                : `${weather.Weekday}`
+                                        }
+                                        temperature={weather.Temperature.Maximum.Value}
+                                    />
                                 </div>
                             ))}
                         </div>
