@@ -8,30 +8,31 @@ export type Location = {
     AdministrativeArea: { ID: string; LocalizedName: string }
 }
 
-// export type WeatherDay = {
-//     Date: string
-//     EpochDate: number
-//     Temperature: {
-//         Minimum: { Value: number; Unit: string; UnitType: number }
-//         Maximum: { Value: number; Unit: string; UnitType: number }
-//     }
-//     Day: {
-//         Icon: number
-//         IconPhrase: string
-//         HasPrecipitation: boolean
-//         PrecipitationType: string
-//         PrecipitationIntensity: string
-//         PrecipitationProbability: number
-//     }
-//     Night: {
-//         Icon: number
-//         IconPhrase: string
-//         HasPrecipitation: boolean
-//         PrecipitationType: string
-//         PrecipitationIntensity: string
-//         PrecipitationProbability: number
-//     }
-// }
+export type WeatherDay = {
+    Weekday: string
+    Date: string
+    EpochDate?: number
+    Temperature: {
+        Minimum: Temperature
+        Maximum: Temperature
+    }
+    Day: {
+        Icon: number
+        IconPhrase?: string
+        HasPrecipitation?: boolean
+        PrecipitationType?: string
+        PrecipitationIntensity?: string
+        PrecipitationProbability?: number
+    }
+    Night: {
+        Icon?: number
+        IconPhrase?: string
+        HasPrecipitation?: boolean
+        PrecipitationType?: string
+        PrecipitationIntensity?: string
+        PrecipitationProbability?: number
+    }
+}
 
 export type WeatherHour = {
     DateTime: string
