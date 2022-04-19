@@ -5,11 +5,24 @@ import { useState } from 'react'
 // import WeatherService from '../services/weather.service'
 // import http from '../http-common'
 
-import { WeatherCurrent, Location } from './types'
+import { WeatherCurrent, Location, WeatherHour } from './types'
 
 // primary background color: gray-700
 // primary text color: gray-200
 // secondary background color: gray-600
+
+function getHourFromDate(date: string) {
+    const hour = new Date(date).getHours()
+    if (hour === 0) {
+        return '12am'
+    } else if (hour < 12) {
+        return `${hour}am`
+    } else if (hour === 12) {
+        return '12pm'
+    } else {
+        return `${hour - 12}pm`
+    }
+}
 
 function WeatherCard({ text, temperature }: { text: string; temperature: number }) {
     // TODO: change the text-[9px] to something better
@@ -41,14 +54,13 @@ export default function Index() {
         },
     })
 
+    const [hourlyWeather, setHourlyWeather] = useState<WeatherHour[]>([])
+
     const [location, setLocation] = useState<Location | null>(null)
 
     const [locationInput, setLocationInput] = useState<string>('')
 
-    const onClickHandler = async () => {
-        // TODO: change this function to use the weather service
-        // const { locations, errors } = await WeatherService.getLocationKey('ottawa')
-
+    const getLocation = async () => {
         const options = {
             method: 'GET',
             url: 'http://dataservice.accuweather.com/locations/v1/cities/autocomplete',
@@ -59,17 +71,85 @@ export default function Index() {
             },
         } as GetLocationProps
 
-        axios
+        return await axios
             .get<GetLocationProps, AxiosResponse<Location[]>>(options.url, {
                 params: options.params,
             })
             .then(response => {
                 if (response.data.length <= 0) throw new Error('No locations found')
-                setLocation(response.data[0])
+                return response.data[0]
             })
             .catch(error => {
-                console.error(error)
+                throw new Error(error.message)
             })
+    }
+
+    const getCurrentWeather = async (locationid: string) => {
+        if (!locationid) throw new Error('No location selected')
+
+        const params = {
+            apikey: 'zFCZuhthsAW0V2YMisJwFqGGB1KLoAva',
+            language: 'en-CA',
+        }
+
+        const url = `http://dataservice.accuweather.com/currentconditions/v1/${locationid}`
+
+        return await axios
+            .get<{ params: { apikey: string; language: string } }, AxiosResponse<WeatherCurrent[]>>(
+                url,
+                { params },
+            )
+            .then(response => {
+                return response.data[0]
+            })
+            .catch(error => {
+                throw new Error(error.message)
+            })
+    }
+
+    const getHourlyWeather = async (locationid: string) => {
+        if (!locationid) throw new Error('No location selected')
+
+        const params = {
+            apikey: 'zFCZuhthsAW0V2YMisJwFqGGB1KLoAva',
+            language: 'en-CA',
+            metric: true,
+        }
+
+        const url = `http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/${locationid}`
+
+        return await axios
+            .get<{ params: { apikey: string; language: string } }, AxiosResponse<WeatherHour[]>>(
+                url,
+                {
+                    params,
+                },
+            )
+            .then(response => {
+                return response.data
+            })
+            .catch(error => {
+                throw new Error(error.message)
+            })
+    }
+
+    const onClickHandler = async () => {
+        // TODO: change this function to use the weather service
+        // const { locations, errors } = await WeatherService.getLocationKey('ottawa')
+        try {
+            const locationData = await getLocation()
+            setLocation(locationData)
+
+            getCurrentWeather(locationData.Key).then(currWeather => {
+                setCurrentWeather(currWeather)
+            })
+
+            getHourlyWeather(locationData.Key).then(hourlyWeather => {
+                setHourlyWeather(hourlyWeather)
+            })
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     return (
@@ -115,9 +195,12 @@ export default function Index() {
                 <div>
                     <div className='flex flex-col  gap-y-6'>
                         <div className='mx-auto flex gap-x-3'>
-                            {[...Array(5)].map((_, i) => (
-                                <div className='' key={i}>
-                                    <WeatherCard text='12 AM' temperature={26} />
+                            {hourlyWeather.map((weather: WeatherHour, index: number) => (
+                                <div className='' key={index}>
+                                    <WeatherCard
+                                        text={getHourFromDate(weather.DateTime)}
+                                        temperature={weather.Temperature.Value}
+                                    />
                                 </div>
                             ))}
                         </div>

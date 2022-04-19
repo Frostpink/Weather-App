@@ -35,19 +35,15 @@ export type Location = {
 
 export type WeatherHour = {
     DateTime: string
-    EpochDateTime: number
+    EpochDateTime?: number
     WeatherIcon: number
-    IconPhrase: string
-    HasPrecipitation: boolean
-    IsDaylight: boolean
-    Temperature: {
-        Value: number
-        Unit: string
-        UnitType: number
-    }
-    PrecipitationProbability: number
-    MobileLink: string
-    Link: string
+    IconPhrase?: string
+    HasPrecipitation?: boolean
+    IsDaylight?: boolean
+    Temperature: Temperature
+    PrecipitationProbability?: number
+    MobileLink?: string
+    Link?: string
 }
 
 export type WeatherCurrent = {
