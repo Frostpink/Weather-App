@@ -52,7 +52,7 @@ function WeatherCard({ text, temperature }: { text: string; temperature: number 
         <div className='rounded-lg bg-gray-600 p-2 text-center text-xs font-semibold text-gray-200 shadow-md'>
             <p>{text}</p>
             <p className='py-3'>ICON</p>
-            <p>{temperature} dC</p>
+            <p>{temperature} °C</p>
         </div>
     )
 }
@@ -239,7 +239,7 @@ export default function IndexRemix() {
                         </div>
                     </div>
                     <p className='text-6xl font-semibold'>
-                        {currentWeather.Temperature.Metric.Value}
+                        {currentWeather.Temperature.Metric.Value} °C
                     </p>
                     <p className='text-xs font-semibold'>
                         {location
