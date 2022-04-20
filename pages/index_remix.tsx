@@ -210,8 +210,8 @@ export default function IndexRemix() {
 
     return (
         <>
-            <div className='flex h-screen w-screen flex-col bg-gray-700'>
-                <div className='flex justify-center px-10'>
+            <div className='flex h-screen w-full flex-col justify-evenly overflow-hidden bg-gray-700'>
+                <div className='absolute inset-x-0 top-7 flex px-10'>
                     <div className='delay-0 flex w-full flex-row items-center rounded-lg bg-gray-600 px-4 transition-all duration-500 focus-within:ring-2'>
                         <p className=''>S</p>
                         <input
@@ -226,10 +226,10 @@ export default function IndexRemix() {
                     </div>
                 </div>
 
-                <div className='flex flex-col items-center text-gray-200'>
+                <div className='mx-auto flex flex-col text-center text-gray-200'>
                     <div className='flex flex-row items-center'>
                         <p>ICON</p>
-                        <div className='text-center'>
+                        <div className=''>
                             <p className='text-3xl font-bold'>Today</p>
                             <p className='text-xs font-semibold'>
                                 {new Date(currentWeather.LocalObservationDateTime)
@@ -248,37 +248,35 @@ export default function IndexRemix() {
                     </p>
                 </div>
 
-                <div>
-                    <div className='flex flex-col  gap-y-6'>
-                        <div className='mx-auto flex gap-x-3'>
-                            {hourlyWeather
-                                .filter((_, index) => !(index % 2))
-                                .map((weather: WeatherHour, index: number) => (
-                                    <div className='' key={index}>
-                                        <WeatherCard
-                                            text={getHourFromDate(weather.DateTime)}
-                                            temperature={weather.Temperature.Value}
-                                        />
-                                    </div>
-                                ))}
-                        </div>
-
-                        <div className='mx-auto flex gap-x-3'>
-                            {dailyWeather.map((weather: WeatherDay, index: number) => (
+                <div className='flex flex-col gap-y-8'>
+                    <div className='mx-auto flex gap-x-2'>
+                        {hourlyWeather
+                            .filter((_, index) => !(index % 2))
+                            .map((weather: WeatherHour, index: number) => (
                                 <div className='' key={index}>
                                     <WeatherCard
-                                        text={
-                                            index === 0
-                                                ? 'Today'
-                                                : index === 1
-                                                ? 'Tomorrow'
-                                                : `${weather.Weekday}`
-                                        }
-                                        temperature={weather.Temperature.Maximum.Value}
+                                        text={getHourFromDate(weather.DateTime)}
+                                        temperature={weather.Temperature.Value}
                                     />
                                 </div>
                             ))}
-                        </div>
+                    </div>
+
+                    <div className='mx-auto flex gap-x-2'>
+                        {dailyWeather.map((weather: WeatherDay, index: number) => (
+                            <div className='' key={index}>
+                                <WeatherCard
+                                    text={
+                                        index === 0
+                                            ? 'Today'
+                                            : index === 1
+                                            ? 'Tomorrow'
+                                            : `${weather.Weekday}`
+                                    }
+                                    temperature={weather.Temperature.Maximum.Value}
+                                />
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
