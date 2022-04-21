@@ -10,6 +10,6 @@ module.exports = {
     serverBuildDirectory: 'build',
     devServerPort: 8002,
     ignoredRouteFiles: ['.*'],
-    serverBuildPath: "build/index.j",
+    serverBuildPath: "build/index.js",
     serverBuildTarget: "vercel",
 }
