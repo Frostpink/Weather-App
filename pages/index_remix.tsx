@@ -224,17 +224,20 @@ export default function IndexRemix() {
             <div className='flex h-screen w-full flex-col justify-evenly overflow-hidden bg-gray-700'>
                 <div className='absolute inset-x-0 top-7 flex px-10'>
                     <div className='delay-0 flex w-full flex-row items-center rounded-lg bg-gray-600 px-4 transition-all duration-500 focus-within:ring-2'>
-                        <p className=''>
+                        <p className='mr-3'>
                             <SearchIcon className='fill-gray-200' />
                         </p>
                         <input
                             placeholder='Search city'
                             value={locationInput}
                             onChange={e => setLocationInput(e.target.value)}
-                            className='my-2 w-full border-none bg-transparent text-sm outline-none focus:outline-none'
+                            className='my-2 w-full border-none bg-transparent text-sm font-semibold text-gray-200 outline-none focus:outline-none'
                         />
-                        <button className='' onClick={onClickHandler}>
-                            *
+                        <button
+                            className='rounded bg-pink-500 px-3 py-0.5 font-semibold text-gray-200'
+                            onClick={onClickHandler}
+                        >
+                            Search
                         </button>
                     </div>
                 </div>
