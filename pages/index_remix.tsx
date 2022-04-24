@@ -6,7 +6,7 @@ import { useState } from 'react'
 // import http from '../http-common'
 
 import { WeatherCurrent, Location, WeatherHour, WeatherDay } from './types'
-import Icons from '../components/icons'
+import Icons, { SearchIcon } from '../components/icons'
 
 // primary background color: gray-700
 // primary text color: gray-200
@@ -224,7 +224,9 @@ export default function IndexRemix() {
             <div className='flex h-screen w-full flex-col justify-evenly overflow-hidden bg-gray-700'>
                 <div className='absolute inset-x-0 top-7 flex px-10'>
                     <div className='delay-0 flex w-full flex-row items-center rounded-lg bg-gray-600 px-4 transition-all duration-500 focus-within:ring-2'>
-                        <p className=''>S</p>
+                        <p className=''>
+                            <SearchIcon className='fill-gray-200' />
+                        </p>
                         <input
                             placeholder='Search city'
                             value={locationInput}
