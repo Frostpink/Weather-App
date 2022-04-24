@@ -6,6 +6,7 @@ import { useState } from 'react'
 // import http from '../http-common'
 
 import { WeatherCurrent, Location, WeatherHour, WeatherDay } from './types'
+import Icons, { SearchIcon } from '../components/icons'
 
 // primary background color: gray-700
 // primary text color: gray-200
@@ -46,13 +47,23 @@ function getWeekdayFromDate(date: string): string {
     }
 }
 
-function WeatherCard({ text, temperature }: { text: string; temperature: number }) {
+function WeatherCard({
+    text,
+    temperature,
+    icon,
+}: {
+    text: string
+    temperature: number
+    icon: number
+}) {
     // TODO: change the text-[9px] to something better
     return (
         <div className='rounded-lg bg-gray-600 p-2 text-center text-xs font-semibold text-gray-200 shadow-md'>
             <p>{text}</p>
-            <p className='py-3'>ICON</p>
-            <p>{temperature} dC</p>
+            <p className='flex justify-center py-3'>
+                <Icons className='h-8 w-8 fill-gray-200' iconNumber={icon} />
+            </p>
+            <p>{temperature} °C</p>
         </div>
     )
 }
@@ -210,75 +221,87 @@ export default function IndexRemix() {
 
     return (
         <>
-            <div className='flex h-screen w-screen flex-col bg-gray-700'>
-                <div className='flex justify-center px-10'>
+            <div className='flex h-screen w-full flex-col justify-evenly overflow-hidden bg-gray-700'>
+                <div className='absolute inset-x-0 top-7 flex px-10'>
                     <div className='delay-0 flex w-full flex-row items-center rounded-lg bg-gray-600 px-4 transition-all duration-500 focus-within:ring-2'>
-                        <p className=''>S</p>
+                        <p className='mr-3'>
+                            <SearchIcon className='fill-gray-200' />
+                        </p>
                         <input
                             placeholder='Search city'
                             value={locationInput}
                             onChange={e => setLocationInput(e.target.value)}
-                            className='my-2 w-full border-none bg-transparent text-sm outline-none focus:outline-none'
+                            className='my-2 w-full border-none bg-transparent text-sm font-semibold text-gray-200 outline-none focus:outline-none'
                         />
-                        <button className='' onClick={onClickHandler}>
-                            *
+                        <button
+                            className='rounded bg-pink-500 px-3 py-0.5 align-top font-semibold text-gray-200'
+                            onClick={onClickHandler}
+                        >
+                            Search
                         </button>
                     </div>
                 </div>
 
-                <div className='flex flex-col items-center text-gray-200'>
-                    <div className='flex flex-row items-center'>
-                        <p>ICON</p>
-                        <div className='text-center'>
-                            <p className='text-3xl font-bold'>Today</p>
-                            <p className='text-xs font-semibold'>
-                                {new Date(currentWeather.LocalObservationDateTime)
-                                    .toDateString()
-                                    .replace(/(\w+)\s(\w+)\s(\w+)\s(\w+)/, '$1, $2 $3')}
+                {location && (
+                    <div className='mx-auto flex flex-col text-center text-gray-200'>
+                        <div className='flex flex-row items-center'>
+                            <p>
+                                <Icons
+                                    className='h-20 w-20 fill-gray-200'
+                                    iconNumber={currentWeather.WeatherIcon}
+                                />
                             </p>
+                            <div className=''>
+                                <p className='text-3xl font-bold'>Today</p>
+                                <p className='text-xs font-semibold'>
+                                    {new Date(currentWeather.LocalObservationDateTime)
+                                        .toDateString()
+                                        .replace(/(\w+)\s(\w+)\s(\w+)\s(\w+)/, '$1, $2 $3')}
+                                </p>
+                            </div>
                         </div>
+                        <p className='text-6xl font-semibold'>
+                            {currentWeather.Temperature.Metric.Value} °C
+                        </p>
+                        <p className='text-xs font-semibold'>
+                            {location
+                                ? `${location.LocalizedName}, ${location.AdministrativeArea.LocalizedName}`
+                                : 'no location'}
+                        </p>
                     </div>
-                    <p className='text-6xl font-semibold'>
-                        {currentWeather.Temperature.Metric.Value}
-                    </p>
-                    <p className='text-xs font-semibold'>
-                        {location
-                            ? `${location.LocalizedName}, ${location.AdministrativeArea.LocalizedName}`
-                            : 'no location'}
-                    </p>
-                </div>
+                )}
 
-                <div>
-                    <div className='flex flex-col  gap-y-6'>
-                        <div className='mx-auto flex gap-x-3'>
-                            {hourlyWeather
-                                .filter((_, index) => !(index % 2))
-                                .map((weather: WeatherHour, index: number) => (
-                                    <div className='' key={index}>
-                                        <WeatherCard
-                                            text={getHourFromDate(weather.DateTime)}
-                                            temperature={weather.Temperature.Value}
-                                        />
-                                    </div>
-                                ))}
-                        </div>
-
-                        <div className='mx-auto flex gap-x-3'>
-                            {dailyWeather.map((weather: WeatherDay, index: number) => (
+                <div className='flex flex-col gap-y-8'>
+                    <div className='mx-auto flex gap-x-2'>
+                        {hourlyWeather
+                            .filter((_, index) => !(index % 2))
+                            .map((weather: WeatherHour, index: number) => (
                                 <div className='' key={index}>
                                     <WeatherCard
-                                        text={
-                                            index === 0
-                                                ? 'Today'
-                                                : index === 1
-                                                ? 'Tomorrow'
-                                                : `${weather.Weekday}`
-                                        }
-                                        temperature={weather.Temperature.Maximum.Value}
+                                        text={getHourFromDate(weather.DateTime)}
+                                        temperature={weather.Temperature.Value}
+                                        icon={weather.WeatherIcon}
                                     />
                                 </div>
                             ))}
-                        </div>
+                    </div>
+
+                    <div className='mx-auto flex gap-x-2'>
+                        {dailyWeather.map((weather: WeatherDay, index: number) => (
+                            <div className='' key={index}>
+                                <WeatherCard
+                                    text={
+                                        index === 0
+                                            ? 'Today'
+                                            : index === 1
+                                            ? 'Tomorrow'
+                                            : `${weather.Weekday}`
+                                    }
+                                    temperature={weather.Temperature.Maximum.Value}
+                                    icon={weather.Day.Icon}
+                                />
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
