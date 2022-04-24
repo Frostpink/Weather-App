@@ -242,32 +242,34 @@ export default function IndexRemix() {
                     </div>
                 </div>
 
-                <div className='mx-auto flex flex-col text-center text-gray-200'>
-                    <div className='flex flex-row items-center'>
-                        <p>
-                            <Icons
-                                className='h-20 w-20 fill-gray-200'
-                                iconNumber={currentWeather.WeatherIcon}
-                            />
-                        </p>
-                        <div className=''>
-                            <p className='text-3xl font-bold'>Today</p>
-                            <p className='text-xs font-semibold'>
-                                {new Date(currentWeather.LocalObservationDateTime)
-                                    .toDateString()
-                                    .replace(/(\w+)\s(\w+)\s(\w+)\s(\w+)/, '$1, $2 $3')}
+                {location && (
+                    <div className='mx-auto flex flex-col text-center text-gray-200'>
+                        <div className='flex flex-row items-center'>
+                            <p>
+                                <Icons
+                                    className='h-20 w-20 fill-gray-200'
+                                    iconNumber={currentWeather.WeatherIcon}
+                                />
                             </p>
+                            <div className=''>
+                                <p className='text-3xl font-bold'>Today</p>
+                                <p className='text-xs font-semibold'>
+                                    {new Date(currentWeather.LocalObservationDateTime)
+                                        .toDateString()
+                                        .replace(/(\w+)\s(\w+)\s(\w+)\s(\w+)/, '$1, $2 $3')}
+                                </p>
+                            </div>
                         </div>
+                        <p className='text-6xl font-semibold'>
+                            {currentWeather.Temperature.Metric.Value} °C
+                        </p>
+                        <p className='text-xs font-semibold'>
+                            {location
+                                ? `${location.LocalizedName}, ${location.AdministrativeArea.LocalizedName}`
+                                : 'no location'}
+                        </p>
                     </div>
-                    <p className='text-6xl font-semibold'>
-                        {currentWeather.Temperature.Metric.Value} °C
-                    </p>
-                    <p className='text-xs font-semibold'>
-                        {location
-                            ? `${location.LocalizedName}, ${location.AdministrativeArea.LocalizedName}`
-                            : 'no location'}
-                    </p>
-                </div>
+                )}
 
                 <div className='flex flex-col gap-y-8'>
                     <div className='mx-auto flex gap-x-2'>
