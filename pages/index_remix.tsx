@@ -231,6 +231,12 @@ export default function IndexRemix() {
                             placeholder='Search city'
                             value={locationInput}
                             onChange={e => setLocationInput(e.target.value)}
+                            onKeyDown={e => {
+                                if (e.key === 'Enter') {
+                                    e.preventDefault()
+                                    onClickHandler()
+                                }
+                            }}
                             className='my-2 w-full border-none bg-transparent text-sm font-semibold text-gray-200 outline-none focus:outline-none'
                         />
                         <button
