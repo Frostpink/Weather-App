@@ -57,7 +57,7 @@ function WeatherCard({ text, temperature }: { text: string; temperature: number 
     )
 }
 
-export default function Index() {
+export default function IndexRemix() {
     type GetLocationProps = {
         method: string
         url: string
