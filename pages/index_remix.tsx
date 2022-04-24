@@ -6,6 +6,7 @@ import { useState } from 'react'
 // import http from '../http-common'
 
 import { WeatherCurrent, Location, WeatherHour, WeatherDay } from './types'
+import Icons from '../components/icons'
 
 // primary background color: gray-700
 // primary text color: gray-200
@@ -46,12 +47,22 @@ function getWeekdayFromDate(date: string): string {
     }
 }
 
-function WeatherCard({ text, temperature }: { text: string; temperature: number }) {
+function WeatherCard({
+    text,
+    temperature,
+    icon,
+}: {
+    text: string
+    temperature: number
+    icon: number
+}) {
     // TODO: change the text-[9px] to something better
     return (
         <div className='rounded-lg bg-gray-600 p-2 text-center text-xs font-semibold text-gray-200 shadow-md'>
             <p>{text}</p>
-            <p className='py-3'>ICON</p>
+            <p className='flex justify-center py-3'>
+                <Icons className='h-8 w-8 fill-gray-200' iconNumber={icon} />
+            </p>
             <p>{temperature} °C</p>
         </div>
     )
@@ -228,7 +239,12 @@ export default function IndexRemix() {
 
                 <div className='mx-auto flex flex-col text-center text-gray-200'>
                     <div className='flex flex-row items-center'>
-                        <p>ICON</p>
+                        <p>
+                            <Icons
+                                className='h-20 w-20 fill-gray-200'
+                                iconNumber={currentWeather.WeatherIcon}
+                            />
+                        </p>
                         <div className=''>
                             <p className='text-3xl font-bold'>Today</p>
                             <p className='text-xs font-semibold'>
@@ -257,6 +273,7 @@ export default function IndexRemix() {
                                     <WeatherCard
                                         text={getHourFromDate(weather.DateTime)}
                                         temperature={weather.Temperature.Value}
+                                        icon={weather.WeatherIcon}
                                     />
                                 </div>
                             ))}
@@ -274,6 +291,7 @@ export default function IndexRemix() {
                                             : `${weather.Weekday}`
                                     }
                                     temperature={weather.Temperature.Maximum.Value}
+                                    icon={weather.Day.Icon}
                                 />
                             </div>
                         ))}
