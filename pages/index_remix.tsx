@@ -234,7 +234,7 @@ export default function IndexRemix() {
                             className='my-2 w-full border-none bg-transparent text-sm font-semibold text-gray-200 outline-none focus:outline-none'
                         />
                         <button
-                            className='rounded bg-pink-500 px-3 py-0.5 font-semibold text-gray-200'
+                            className='rounded bg-pink-500 px-3 py-0.5 align-top font-semibold text-gray-200'
                             onClick={onClickHandler}
                         >
                             Search
