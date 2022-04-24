@@ -39,6 +39,8 @@ import { Svg42 as Icon42 } from './42'
 import { Svg43 as Icon43 } from './43'
 import { Svg44 as Icon44 } from './44'
 
+export { default as SearchIcon } from './searchIcon'
+
 export const WeatherIcons = ({
     iconNumber,
     className,
