@@ -57,7 +57,7 @@ function WeatherCard({ text, temperature }: { text: string; temperature: number 
     )
 }
 
-export default function Index() {
+export default function IndexRemix() {
     type GetLocationProps = {
         method: string
         url: string
@@ -85,7 +85,7 @@ export default function Index() {
     const getLocation = async () => {
         const options = {
             method: 'GET',
-            url: 'http://dataservice.accuweather.com/locations/v1/cities/autocomplete',
+            url: 'https://dataservice.accuweather.com/locations/v1/cities/autocomplete',
             params: {
                 apikey: '***REMOVED***',
                 q: locationInput,
@@ -114,7 +114,7 @@ export default function Index() {
             language: 'en-CA',
         }
 
-        const url = `http://dataservice.accuweather.com/currentconditions/v1/${locationid}`
+        const url = `https://dataservice.accuweather.com/currentconditions/v1/${locationid}`
 
         return await axios
             .get<{ params: { apikey: string; language: string } }, AxiosResponse<WeatherCurrent[]>>(
@@ -138,7 +138,7 @@ export default function Index() {
             metric: true,
         }
 
-        const url = `http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/${locationid}`
+        const url = `https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/${locationid}`
 
         return await axios
             .get<{ params: { apikey: string; language: string } }, AxiosResponse<WeatherHour[]>>(
@@ -164,7 +164,7 @@ export default function Index() {
             metric: true,
         }
 
-        const url = `http://dataservice.accuweather.com/forecasts/v1/daily/5day/${locationid}`
+        const url = `https://dataservice.accuweather.com/forecasts/v1/daily/5day/${locationid}`
 
         return await axios
             .get<
