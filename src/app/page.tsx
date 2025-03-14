@@ -1,11 +1,10 @@
 /** @format */
+"use client"
+
 import axios, { AxiosResponse } from 'axios'
 import { useState } from 'react'
 
-// import WeatherService from '../services/weather.service'
-// import http from '../http-common'
-
-import { WeatherCurrent, Location, WeatherHour, WeatherDay } from './types'
+import { WeatherCurrent, Location, WeatherHour, WeatherDay } from '../types'
 import Icons, { SearchIcon } from '../components/icons'
 
 // primary background color: gray-700

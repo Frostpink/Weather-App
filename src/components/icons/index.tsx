@@ -47,8 +47,8 @@ export const WeatherIcons = ({
 }: {
     iconNumber: number
     className: string
-}): JSX.Element => {
-    let Icon: JSX.Element
+}) => {
+    let Icon
     switch (iconNumber) {
         case 1:
             Icon = <Icon1 className={className} />
